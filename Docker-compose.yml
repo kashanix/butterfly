@@ -1,0 +1,24 @@
+﻿version: "3.6"
+
+services:               
+    customerapi:
+        build: 
+            context: ./
+            dockerfile: Web.Api/Dockerfile
+        ports:
+            - 8000:80
+            - 8001:443
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ASPNETCORE_HTTPS_PORT="8001"
+            - "ASPNETCORE_URLS=https://+;http://+"
+            - ASPNETCORE_Kestrel__Certificates__Default__Password=Farhad1D
+            - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+        volumes:
+            - ~/.aspnet/https:/https:ro
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 3
+                window: 60s
